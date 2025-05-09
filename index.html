@@ -2,14 +2,14 @@
   <input type="text" name="barcode" placeholder="Barcode" required><br>
   <input type="text" name="prodname" placeholder="Product Name" required><br>
   <input type="text" name="nie" placeholder="NIE" required><br>
-  <input type="text" name="masaberlaku" placeholder="Masa Berlaku (DD/MM/YYYY)" required><br>
-  <input type="text" name="expired" placeholder="Expired Produk (DD/MM/YYYY)" required><br>
+  <input type="date" name="masaberlaku" placeholder="Masa Berlaku"><br>
+  <input type="date" name="expired" placeholder="Expired Produk"><br>
   <input type="text" name="keterangan" placeholder="Keterangan"><br>
   <button type="submit">Kirim</button>
 </form>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzr0Vs_iJidfGLFVC0KRJ7CC-9O2CzXioARZve9rb3bHbj6CmeV7De-p2VeOdnYJLRl/exec'; // ganti dengan URL dari langkah sebelumnya
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzr0Vs_iJidfGLFVC0KRJ7CC-9O2CzXioARZve9rb3bHbj6CmeV7De-p2VeOdnYJLRl/exec';
   const form = document.getElementById('form-nie');
 
   form.addEventListener('submit', e => {
@@ -18,9 +18,12 @@
 
     fetch(scriptURL, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-    .then(response => alert("Berhasil disimpan!"))
+    .then(response => {
+      alert("Berhasil disimpan!");
+      form.reset();
+    })
     .catch(error => alert("Gagal mengirim data!"));
   });
 </script>
