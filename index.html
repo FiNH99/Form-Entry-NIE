@@ -9,33 +9,18 @@
 </form>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzr0Vs_iJidfGLFVC0KRJ7CC-9O2CzXioARZve9rb3bHbj6CmeV7De-p2VeOdnYJLRl/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzr0Vs_iJidfGLFVC0KRJ7CC-9O2CzXioARZve9rb3bHbj6CmeV7De-p2VeOdnYJLRl/exec'; // ganti dengan URL dari langkah sebelumnya
   const form = document.getElementById('form-nie');
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(new FormData(form).entries());
 
     fetch(scriptURL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify(data)
     })
-    .then(response => response.text())
-    .then(result => {
-      if (result.toLowerCase().includes("success")) {
-        alert("✅ Data berhasil disimpan!");
-        form.reset();
-      } else {
-        alert("⚠️ Terjadi kesalahan: " + result);
-      }
-    })
-    .catch(error => {
-      console.error('Error!', error.message);
-      alert("❌ Gagal mengirim data: " + error.message);
-    });
+    .then(response => alert("Berhasil disimpan!"))
+    .catch(error => alert("Gagal mengirim data!"));
   });
 </script>
