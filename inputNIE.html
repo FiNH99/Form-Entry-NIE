@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Entry Produk Non-Food</title>
+</head>
+<body>
+  <h2>Form Pengecekan NIE & Expired Produk</h2>
+  <form id="productForm">
+    <label>NO: <input type="text" name="no" required></label><br>
+    <label>Barcode: <input type="text" name="barcode" required></label><br>
+    <label>Product Name: <input type="text" name="prodname" required></label><br>
+    <label>NIE: <input type="text" name="nie" required></label><br>
+    <label>Masa Berlaku: <input type="text" name="masaberlaku" required></label><br>
+    <label>Expired Produk: <input type="text" name="expiredproduk" required></label><br>
+    <label>Keterangan: <input type="text" name="keterangan"></label><br><br>
+    <button type="submit">Kirim</button>
+  </form>
+
+  <script>
+    document.getElementById("productForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const data = {
+        no: form.no.value,
+        barcode: form.barcode.value,
+        prodname: form.prodname.value,
+        nie: form.nie.value,
+        masaberlaku: form.masaberlaku.value,
+        expiredproduk: form.expiredproduk.value,
+        keterangan: form.keterangan.value
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbz_23JoGPW067xj_yquYav-czBbcPQXJLQKHTUcCQY/dev", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(response => {
+        alert("Data berhasil dikirim!");
+        form.reset();
+      })
+      .catch(error => {
+        alert("Terjadi kesalahan!");
+        console.error(error);
+      });
+    });
+  </script>
+</body>
+</html>
