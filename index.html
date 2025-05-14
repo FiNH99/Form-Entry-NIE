@@ -1,29 +1,45 @@
-<form id="form-nie">
-  <input type="text" name="barcode" placeholder="Barcode" required><br>
-  <input type="text" name="prodname" placeholder="Product Name" required><br>
-  <input type="text" name="nie" placeholder="NIE" required><br>
-  <input type="date" name="periode" placeholder="Periode"><br>
-  <input type="date" name="expired" placeholder="Expired"><br>
-  <input type="text" name="keterangan" placeholder="Keterangan"><br>
-  <button type="submit">Kirim</button>
+<form id="dataForm">
+  <input type="text" name="no" placeholder="No">
+  <input type="text" name="barcode" placeholder="Barcode">
+  <input type="text" name="prodname" placeholder="Nama Produk">
+  <input type="text" name="nie" placeholder="NIE">
+  <input type="date" name="periode" placeholder="periode">
+  <input type="date" name="Expired" placeholder="Expired">
+  <input type="text" name="keterangan" placeholder="Keterangan">
+  <button type="submit">Submit</button>
 </form>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzr0Vs_iJidfGLFVC0KRJ7CC-9O2CzXioARZve9rb3bHbj6CmeV7De-p2VeOdnYJLRl/exec';
-  const form = document.getElementById('form-nie');
+document.getElementById('dataForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const jsonData = {};
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
-
-    fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-    .then(response => {
-      alert("Berhasil disimpan!");
-      form.reset();
-    })
-    .catch(error => alert("Gagal mengirim data!"));
+  formData.forEach((value, key) => {
+    // Format tanggal untuk Google Sheets (MM/dd/yyyy)
+    if (key === 'periode' || key === 'Expired') {
+      const date = new Date(value);
+      jsonData[key] = date.toLocaleDateString('en-US');
+    } else {
+      jsonData[key] = value;
+    }
   });
+
+  fetch('https://script.google.com/macros/s/AKfycbyaX0csiUg3IsCpXo-dk_g_kYKzWZv70CLquWpeLDeL4s66Ov7gEi2gnxgHnPPI9U4j/exec', {
+    method: 'POST',
+    body: JSON.stringify(jsonData),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert(data);
+    document.getElementById('dataForm').reset();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan saat mengirim data');
+  });
+});
 </script>
