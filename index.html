@@ -16,26 +16,36 @@ document.getElementById('dataForm').addEventListener('submit', function(e) {
   const jsonData = {};
 
   formData.forEach((value, key) => {
-    // Format tanggal untuk Google Sheets (MM/dd/yyyy)
+    // Format tanggal untuk Google Sheets (yyyy-MM-dd)
     if (key === 'periode' || key === 'Expired') {
       const date = new Date(value);
-      jsonData[key] = date.toLocaleDateString('en-US');
+      const formattedDate = date.toISOString().split('T')[0];
+      jsonData[key] = formattedDate;
     } else {
       jsonData[key] = value;
     }
   });
 
-  fetch('https://script.google.com/macros/s/AKfycbyaX0csiUg3IsCpXo-dk_g_kYKzWZv70CLquWpeLDeL4s66Ov7gEi2gnxgHnPPI9U4j/exec', {
+  // Ganti URL ini dengan URL Web App Anda yang baru
+  fetch('MASUKKAN_URL_WEB_APP_ANDA_DISINI', {
     method: 'POST',
     body: JSON.stringify(jsonData),
     headers: {
       'Content-Type': 'application/json'
     }
   })
-     .then(response => {
-      alert("Berhasil disimpan!");
-      form.reset();
-    })
-    .catch(error => alert("Gagal mengirim data!"));
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      alert('Data berhasil disimpan!');
+      document.getElementById('dataForm').reset();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan saat mengirim data');
   });
+});
 </script>
