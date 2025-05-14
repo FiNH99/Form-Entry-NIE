@@ -32,10 +32,19 @@ document.getElementById('dataForm').addEventListener('submit', function(e) {
     headers: {
       'Content-Type': 'application/json'
     }
-   .then(response => {
-      alert("Berhasil disimpan!");
-      form.reset();
-    })
-    .catch(error => alert("Gagal mengirim data!"));
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      alert('Data berhasil disimpan!');
+      document.getElementById('dataForm').reset();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan saat mengirim data');
   });
+});
 </script>
