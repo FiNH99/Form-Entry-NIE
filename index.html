@@ -25,26 +25,25 @@ document.getElementById('dataForm').addEventListener('submit', function(e) {
     }
   });
 
-  // Ganti URL ini dengan URL Web App Anda yang baru
-  fetch('https://script.google.com/macros/s/AKfycbwsopL3ZlHCj5gOWr_me_1gfpJy8FtmpTTBN3u23imRNfSaALN-wgyW7v2ihpUGOw1PsA/exec', {
+  // URL Web App dari Google Apps Script
+  fetch('https://script.google.com/macros/s/AKfycbyaX0csiUg3IsCpXo-dk_g_kYKzWZv70CLquWpeLDeL4s66Ov7gEi2gnxgHnPPI9U4j/exec', {
     method: 'POST',
+    mode: 'no-cors', // Tambahkan ini untuk menghindari masalah CORS
     body: JSON.stringify(jsonData),
     headers: {
       'Content-Type': 'application/json'
     }
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'success') {
-      alert('Data berhasil disimpan!');
-      document.getElementById('dataForm').reset();
-    } else {
-      alert('Error: ' + data.message);
+  .then(response => {
+    if (!response.ok && response.status !== 0) { // Status 0 adalah normal untuk mode no-cors
+      throw new Error('Network response was not ok');
     }
+    document.getElementById('dataForm').reset();
+    alert('Data berhasil dikirim!');
   })
   .catch(error => {
     console.error('Error:', error);
-    alert('Terjadi kesalahan saat mengirim data');
+    alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.');
   });
 });
 </script>
